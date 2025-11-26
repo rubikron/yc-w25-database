@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "YC Winter 2025 Database",
-  description: "Explore 160+ startups from Y Combinator's Winter 2025 batch",
+  title: "YC Fall 2025 Database",
+  description: "Explore 100+ startups from Y Combinator's Fall 2025 batch with comprehensive VC reports",
 };
 
 export default function RootLayout({

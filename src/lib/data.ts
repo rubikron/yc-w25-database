@@ -1,8 +1,9 @@
 import { Company } from '@/types/company'
 
-export async function loadCompanies(): Promise<Company[]> {
+export async function loadCompanies(batch: 'F25' | 'W25' = 'F25'): Promise<Company[]> {
   try {
-    const response = await fetch('/data/companies.json')
+    const filename = batch === 'W25' ? 'companies.json' : 'companies-f25.json'
+    const response = await fetch(`/data/${filename}`)
     if (!response.ok) {
       throw new Error('Failed to load companies data')
     }

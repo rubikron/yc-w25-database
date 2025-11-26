@@ -3,11 +3,11 @@ const cheerio = require('cheerio')
 const fs = require('fs')
 const path = require('path')
 
-async function scrapeYCW25() {
+async function scrapeYCBatch(batch = 'w25') {
   try {
-    console.log('Fetching YC W25 data from extruct.ai...')
+    console.log(`Fetching YC ${batch.toUpperCase()} data from extruct.ai...`)
 
-    const response = await axios.get('https://www.extruct.ai/ycombinator-companies/w25/', {
+    const response = await axios.get(`https://www.extruct.ai/ycombinator-companies/${batch.toLowerCase()}/`, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -90,7 +90,8 @@ async function scrapeYCW25() {
     }
 
     // Save to JSON
-    const outputPath = path.join(outputDir, 'companies.json')
+    const filename = batch === 'w25' ? 'companies.json' : `companies-${batch}.json`
+    const outputPath = path.join(outputDir, filename)
     fs.writeFileSync(
       outputPath,
       JSON.stringify({ companies }, null, 2)
@@ -171,7 +172,7 @@ function parseCard($, $el, index) {
       employees: Math.floor(Math.random() * 15) + 2
     },
     tags: extractTags(tagline, category),
-    ycBatch: 'W25',
+    ycBatch: batch.toUpperCase(),
     lastUpdated: new Date().toISOString()
   }
 }
@@ -189,7 +190,7 @@ function createCompanyFromStructuredData(item, index) {
     funding: { round: 'Seed', amount: '' },
     metrics: { employees: Math.floor(Math.random() * 15) + 2 },
     tags: [],
-    ycBatch: 'W25',
+    ycBatch: batch.toUpperCase(),
     lastUpdated: new Date().toISOString()
   }
 }
@@ -246,4 +247,5 @@ function extractTags(tagline, category) {
 }
 
 // Run the scraper
-scrapeYCW25()
+const batch = process.argv[2] || 'w25'
+scrapeYCBatch(batch)

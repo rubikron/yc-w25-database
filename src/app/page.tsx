@@ -6,6 +6,7 @@ import { CompanyTable } from '@/components/CompanyTable'
 import { TableFilters } from '@/components/TableFilters'
 import { CategoryChart } from '@/components/CategoryChart'
 import { ExportButton } from '@/components/ExportButton'
+import { BatchSelector } from '@/components/BatchSelector'
 import { useStore } from '@/store/useStore'
 import { Button } from '@/components/ui/button'
 import { LayoutGrid, List } from 'lucide-react'
@@ -13,19 +14,27 @@ import { CompanyCard } from '@/components/CompanyCard'
 import { useCompanies } from '@/hooks/useCompanies'
 
 export default function HomePage() {
-  const { viewMode, setViewMode } = useStore()
+  const { viewMode, setViewMode, selectedBatch } = useStore()
   const { companies } = useCompanies()
+
+  const batchTitle = selectedBatch === 'F25' ? 'Y Combinator Fall 2025' : 'Y Combinator Winter 2025'
+  const batchSubtitle = selectedBatch === 'F25'
+    ? `Explore ${companies.length}+ startups from YC's F25 batch`
+    : `Explore ${companies.length}+ startups from YC's W25 batch`
 
   return (
     <main className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="border-b">
         <div className="container mx-auto px-4 py-12 text-center">
+          <div className="flex justify-center mb-6">
+            <BatchSelector />
+          </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Y Combinator Winter 2025
+            {batchTitle}
           </h1>
           <p className="text-xl text-muted-foreground mb-8">
-            Explore 160+ startups from YC&apos;s W25 batch
+            {batchSubtitle}
           </p>
           <SearchBar />
         </div>

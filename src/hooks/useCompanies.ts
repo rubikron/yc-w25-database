@@ -13,18 +13,19 @@ export function useCompanies() {
     isLoading,
     error,
     filters,
+    selectedBatch,
     setCompanies,
     setFilteredCompanies,
     setLoading,
     setError,
   } = useStore()
 
-  // Load companies on mount
+  // Load companies on mount and when batch changes
   useEffect(() => {
     async function fetchCompanies() {
       try {
         setLoading(true)
-        const data = await loadCompanies()
+        const data = await loadCompanies(selectedBatch)
         setCompanies(data)
         setError(null)
       } catch (err) {
@@ -34,10 +35,8 @@ export function useCompanies() {
       }
     }
 
-    if (companies.length === 0) {
-      fetchCompanies()
-    }
-  }, [companies.length, setCompanies, setError, setLoading])
+    fetchCompanies()
+  }, [selectedBatch, setCompanies, setError, setLoading])
 
   // Create search index
   const searchIndex = useMemo(() => {

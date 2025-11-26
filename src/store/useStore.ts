@@ -8,6 +8,9 @@ interface AppState {
   isLoading: boolean
   error: string | null
 
+  // Batch selection
+  selectedBatch: 'F25' | 'W25'
+
   // Filters
   filters: FilterState
 
@@ -22,6 +25,7 @@ interface AppState {
   setFilteredCompanies: (companies: Company[]) => void
   setLoading: (loading: boolean) => void
   setError: (error: string | null) => void
+  setSelectedBatch: (batch: 'F25' | 'W25') => void
   setFilters: (filters: Partial<FilterState>) => void
   resetFilters: () => void
   toggleBookmark: (companyId: string) => void
@@ -43,6 +47,7 @@ export const useStore = create<AppState>()(
       filteredCompanies: [],
       isLoading: true,
       error: null,
+      selectedBatch: 'F25',
       filters: defaultFilters,
       bookmarks: [],
       viewMode: 'table',
@@ -58,6 +63,9 @@ export const useStore = create<AppState>()(
 
       setError: (error) =>
         set({ error }),
+
+      setSelectedBatch: (selectedBatch) =>
+        set({ selectedBatch, companies: [], filteredCompanies: [], isLoading: true }),
 
       setFilters: (newFilters) =>
         set((state) => ({
@@ -82,6 +90,7 @@ export const useStore = create<AppState>()(
       partialize: (state) => ({
         bookmarks: state.bookmarks,
         viewMode: state.viewMode,
+        selectedBatch: state.selectedBatch,
       }),
     }
   )
